@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<title>Unit Testing Minimal PubSub</title>
+<link type="text/css" rel="stylesheet" href="http://yui.yahooapis.com/3.3.0/build/cssfonts/fonts-min.css" />
+</head>
+<body class="yui3-skin-sam  yui-skin-sam">
+<h1>Minimal PubSub Unit Tests</h1>
+<p>
+	An ultra minimalist pub/sub framework weighing in at only 198 bytes gzipped.
+</p>
+<div id="testLogger"></div>
+<script type="text/javascript" src="http://yui.yahooapis.com/3.3.0/build/yui/yui-min.js"></script>
+<script type="text/javascript">c_ = {};</script>
+<script type="text/javascript" src="minpubsub.js"></script>
+<script type="text/javascript">
+YUI({ filter: 'raw' }).use("node", "console", "test" , function (Y) {
+	Y.namespace("pubsub.test");   
+	Y.pubsub.test.PublishTestCase = new Y.Test.Case({
+		name : "Publish Tests",
+		
+		setUp : function () {
+			var me = this;
+			me.count = 0;
+
+			c_["/some/topic"] = [
+				function (msg) {
+					me.count++;
+				}
+			];
+		},
+		tearDown : function () {
+			delete c_["/some/topic"];
+			delete this.count;
+		},
+		
+		//tests
+		testHasSub : function () {
+			var Assert = Y.Assert;
+		
+			window.publish("/some/topic");
+
+			Assert.areEqual(1, this.count);   
+		},
+		testNoSub : function () {
+			var Assert = Y.Assert;
+		
+			window.publish("/bogus/topic");
+
+			Assert.areEqual(0, this.count);       
+		}
+	});
+	
+	Y.pubsub.test.SubscribeTestCase = new Y.Test.Case({
+		name : "Subscribe Tests",
+		
+		tearDown : function () {
+			delete c_["/some/topic"];
+		},
+		
+		//tests
+		testAddSub : function () {
+			var Assert = Y.Assert,
+				func = function(){};
+		
+			window.subscribe("/some/topic", func);
+			
+			Assert.areEqual(func, c_["/some/topic"][0]);
+		}
+	});
+
+	Y.pubsub.test.UnsubscribeTestCase = new Y.Test.Case({
+		name : "Unsubscribe Tests",
+		
+		setUp : function () {
+			this.func = function () {};
+			c_["/some/topic"] = [this.func];
+		},
+		tearDown : function () {
+			delete c_["/some/topic"];
+		},
+		
+		//tests
+		testRemoveSub : function () {
+			var Assert = Y.Assert;
+		
+			window.unsubscribe(["/some/topic", this.func]);
+
+			Assert.areNotEqual(this.func, c_["/some/topic"][0]);
+		}
+	});
+	
+	Y.pubsub.test.PubSubSuite = new Y.Test.Suite("PubSub Suite");
+	Y.pubsub.test.PubSubSuite.add(Y.pubsub.test.PublishTestCase);
+	Y.pubsub.test.PubSubSuite.add(Y.pubsub.test.SubscribeTestCase);
+	Y.pubsub.test.PubSubSuite.add(Y.pubsub.test.UnsubscribeTestCase);
+
+	var r = new Y.Console({
+		newestOnTop : false,
+		style: 'block'
+	});
+	
+	r.render('#testLogger');    
+	Y.Test.Runner.add(Y.pubsub.test.PubSubSuite);
+
+	Y.Test.Runner.run();
+});
+</script>
