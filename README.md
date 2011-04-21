@@ -1,4 +1,4 @@
-Minimal PubSub
+MinPubSub
 =========
 
 An ultra minimalist pub/sub framework weighing in at only **198 bytes** gzipped. Created by rewritting Peter Higgins jQuery plugin to be self contained.
