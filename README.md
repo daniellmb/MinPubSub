@@ -1,7 +1,7 @@
 MinPubSub
 =========
 
-A micro publish/subscribe messaging framework, weighing in at only **198 bytes** gzipped. Created by rewritting Peter Higgins jQuery plugin to be self contained. Keep your projects loosely coupled with this wonderful design pattern.
+A micro publish/subscribe messaging framework, weighing in at only **198 bytes** gzipped. Created by rewriting Peter Higgins jQuery plugin, it is completely self contained with no external dependencies. Keep your projects loosely coupled with this wonderful design pattern.
 
 ### Features
 
