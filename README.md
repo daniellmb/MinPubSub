@@ -47,7 +47,7 @@ A micro publish/subscribe messaging framework, weighing in at only **198 bytes**
 
 ##### Options:
 
-If you don't want these methods added to the window object simply modify the imediate function to pass the JavaScript object of your choosing.
+If you don't want these methods added to the window object simply modify the immediate function to pass in the JavaScript object of your choosing.
 
 ##### Methods:
 
