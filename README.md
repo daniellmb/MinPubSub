@@ -15,13 +15,12 @@ A micro publish/subscribe messaging framework, weighing in at only **198 bytes**
 	- Node.js
 	- Rhino
 	- Development (console, etc.) 
-	- Safari 4
-	- Google Chrome 5
+	- Safari 4 - 5
+	- Google Chrome 5 - 10
 	- Internet Explorer 5 - 9
 	- iPhone Safari
 	- iPad Safari
-	- Firefox 3
-	- Firefox 4
+	- Firefox 3 - 4
 	- Opera 10.61
 
 ### How to use
