@@ -9,27 +9,27 @@
 	// the topic/subscription hash
 	var cache = d.c_ || {}; //check for "c_" cache for unit testing
 	
-	d.publish = function(/* String */ topic, /* Array? */ args){
+	d.publish = function(/* String */ topic /*, Args... */ ){
 		// summary: 
 		//		Publish some data on a named topic.
 		// topic: String
 		//		The channel to publish on
-		// args: Array?
-		//		The data to publish. Each array item is converted into an ordered
-		//		arguments on the subscribed functions. 
+		// Args....
+		//		The data to publish. Each remaining argument is passed to the
+    //    subscribed functions.
 		//
 		// example:
 		//		Publish stuff on '/some/topic'. Anything subscribed will be called
 		//		with a function signature like: function(a,b,c){ ... }
 		//
-		//		publish("/some/topic", ["a","b","c"]);
+		//		publish("/some/topic", "a", "b", "c");
 		
 		var subs = cache[topic],
 			len = subs ? subs.length : 0;
 
 		//can change loop or reverse array if the order matters
 		while(len--){
-			subs[len].apply(d, args || []);
+			subs[len].apply(d, Array.prototype.slice.call(arguments, 1));
 		}
 	};
 
