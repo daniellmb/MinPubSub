@@ -93,6 +93,13 @@ YUI({ filter: 'raw' }).use("node", "console", "test" , function (Y) {
 			window.unsubscribe(["/some/topic", this.func]);
 
 			Assert.areNotEqual(this.func, c_["/some/topic"][0]);
+		},
+		testRemoveSubTwoArgs : function () {
+			var Assert = Y.Assert;
+
+			window.unsubscribe("/some/topic", this.func);
+
+			Assert.areNotEqual(this.func, c_["/some/topic"][0]);
 		}
 	});
 	

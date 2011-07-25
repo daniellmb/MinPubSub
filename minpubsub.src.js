@@ -56,7 +56,7 @@
 		return [topic, callback]; // Array
 	};
 
-	d.unsubscribe = function(/* Array */ handle){
+	d.unsubscribe = function(/* Array */ handle, /* Function? */ callback){
 		// summary:
 		//		Disconnect a subscribed function for a topic.
 		// handle: Array
@@ -65,8 +65,8 @@
 		//		var handle = subscribe("/some/topic", function(){});
 		//		unsubscribe(handle);
 		
-		var subs = cache[handle[0]],
-			callback = handle[1],
+		var subs = cache[callback ? handle : handle[0]],
+			callback = callback || handle[1],
 			len = subs ? subs.length : 0;
 		
 		while(len--){
