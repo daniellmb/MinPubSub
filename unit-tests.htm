@@ -75,6 +75,29 @@ YUI({ filter: 'raw' }).use("node", "console", "test" , function (Y) {
 		}
 	});
 
+	Y.pubsub.test.OnceTestCase = new Y.Test.Case({
+		name : "Subscribe Once Tests",
+
+		tearDown : function () {
+			delete c_["/some/topic"];
+		},
+
+		//tests
+		testAddSub : function () {
+			var Assert = Y.Assert,
+				count = 0,
+			func = function(val){ console.log(val); count += val; },
+				handle = window.once("/some/topic", func);
+
+			Assert.areEqual(handle[1], c_["/some/topic"][0]);
+			window.publish("/some/topic", [3]);
+			Assert.areEqual(3, count);
+			window.publish("/some/topic", [5]);
+			Assert.areEqual(3, count);
+			Assert.areNotEqual(handle[1], c_["/some/topic"][0]);
+		}
+	});
+
 	Y.pubsub.test.UnsubscribeTestCase = new Y.Test.Case({
 		name : "Unsubscribe Tests",
 		
@@ -99,6 +122,7 @@ YUI({ filter: 'raw' }).use("node", "console", "test" , function (Y) {
 	Y.pubsub.test.PubSubSuite = new Y.Test.Suite("MinPubSub Suite");
 	Y.pubsub.test.PubSubSuite.add(Y.pubsub.test.PublishTestCase);
 	Y.pubsub.test.PubSubSuite.add(Y.pubsub.test.SubscribeTestCase);
+	Y.pubsub.test.PubSubSuite.add(Y.pubsub.test.OnceTestCase);
 	Y.pubsub.test.PubSubSuite.add(Y.pubsub.test.UnsubscribeTestCase);
 
 	var r = new Y.Console({
