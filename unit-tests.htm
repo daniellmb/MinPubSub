@@ -30,8 +30,8 @@ YUI({ filter: 'raw' }).use("node", "console", "test" , function (Y) {
 			me.count = 0;
 
 			c_["/some/topic"] = [
-				function (msg) {
-					me.count++;
+				function (val) {
+					me.count += val;
 				}
 			];
 		},
@@ -44,9 +44,9 @@ YUI({ filter: 'raw' }).use("node", "console", "test" , function (Y) {
 		testHasSub : function () {
 			var Assert = Y.Assert;
 		
-			window.publish("/some/topic");
+			window.publish("/some/topic", 3);
 
-			Assert.areEqual(1, this.count);   
+			Assert.areEqual(3, this.count);
 		},
 		testNoSub : function () {
 			var Assert = Y.Assert;
