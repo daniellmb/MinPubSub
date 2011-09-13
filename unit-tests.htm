@@ -111,6 +111,32 @@ YUI({ filter: 'raw' }).use("node", "console", "test" , function (Y) {
 			window.publish("/some/path");
 			
 			Assert.areEqual("/some/path", originalTopic);
+		},
+		
+		testPublishAnySlashes : function() {
+			var Assert = Y.Assert,
+			    counter = 0,
+				func = function(){ counter++; };
+		
+			window.subscribe("somepath", func);
+			
+			window.publish("somepath");
+			
+			Assert.areEqual(1, counter);
+		},
+		
+		testPublishWithoutLeadingSlash : function() {
+			var Assert = Y.Assert,
+			    counter = 0,
+				func = function(){ counter++; };
+		
+			window.subscribe("some", func);
+			window.subscribe("some/path", func);
+			
+			window.publish("some/path");
+			window.publish("bogus/path");
+			
+			Assert.areEqual(2, counter);
 		}
 	});
 
