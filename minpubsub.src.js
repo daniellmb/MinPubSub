@@ -9,7 +9,23 @@
 	// the topic/subscription hash
 	var cache = d.c_ || {}; //check for "c_" cache for unit testing
 	
+	var publishTopic = function(/* String */ topic, /* String */ originalTopic, /* Array? */ args) {
+	    console.log('publishing', topic);
+		var subs = cache[topic],
+			len = subs ? subs.length : 0
+			obj = {
+			    originalTopic: originalTopic /*,
+			    subTopic: ..... */
+			};
+
+		//can change loop or reverse array if the order matters
+		while(len--){
+			subs[len].apply(obj, args || []);
+		}
+	}
+	
 	d.publish = function(/* String */ topic, /* Array? */ args){
+	    var currentTopic;
 		// summary: 
 		//		Publish some data on a named topic.
 		// topic: String
@@ -23,18 +39,12 @@
 		//		with a function signature like: function(a,b,c){ ... }
 		//
 		//		publish("/some/topic", ["a","b","c"]);
-		
-		var subs = cache[topic],
-			len = subs ? subs.length : 0
-			obj = {
-			    topic: topic /*,
-			    subTopic: ..... */
-			};
-
-		//can change loop or reverse array if the order matters
-		while(len--){
-			subs[len].apply(obj, args || []);
+		currentTopic = topic;
+		while ( currentTopic.length > 0 ) {
+		    publishTopic(currentTopic, topic, args);
+		    currentTopic = currentTopic.substring(0, currentTopic.lastIndexOf('/'));
 		}
+		
 	};
 
 	d.subscribe = function(/* String */ topic, /* Function */ callback){
