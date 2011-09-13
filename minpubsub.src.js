@@ -25,11 +25,15 @@
 		//		publish("/some/topic", ["a","b","c"]);
 		
 		var subs = cache[topic],
-			len = subs ? subs.length : 0;
+			len = subs ? subs.length : 0
+			obj = {
+			    topic: topic /*,
+			    subTopic: ..... */
+			};
 
 		//can change loop or reverse array if the order matters
 		while(len--){
-			subs[len].apply(d, args || []);
+			subs[len].apply(obj, args || []);
 		}
 	};
 
