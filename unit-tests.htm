@@ -18,7 +18,7 @@
 <div id="testLogger"></div>
 <script type="text/javascript" src="http://yui.yahooapis.com/3.3.0/build/yui/yui-min.js"></script>
 <script type="text/javascript">c_ = {};</script>
-<script type="text/javascript" src="minpubsub.js"></script>
+<script type="text/javascript" src="minpubsub.src.js"></script>
 <script type="text/javascript">
 YUI({ filter: 'raw' }).use("node", "console", "test" , function (Y) {
 	Y.namespace("pubsub.test");   
@@ -30,6 +30,11 @@ YUI({ filter: 'raw' }).use("node", "console", "test" , function (Y) {
 			me.count = 0;
 
 			c_["/some/topic"] = [
+				function (msg) {
+					me.count++;
+				}
+			];
+			c_["/some"] = [
 				function (msg) {
 					me.count++;
 				}
@@ -46,7 +51,7 @@ YUI({ filter: 'raw' }).use("node", "console", "test" , function (Y) {
 		
 			window.publish("/some/topic");
 
-			Assert.areEqual(1, this.count);   
+			Assert.areEqual(2, this.count);   
 		},
 		testNoSub : function () {
 			var Assert = Y.Assert;
@@ -54,6 +59,15 @@ YUI({ filter: 'raw' }).use("node", "console", "test" , function (Y) {
 			window.publish("/bogus/topic");
 
 			Assert.areEqual(0, this.count);       
+		},
+		testParentSub : function() {
+			var Assert = Y.Assert;
+		
+			window.publish("/some");
+			Assert.areEqual(1, this.count);  
+			window.publish("/some/topic");
+
+			Assert.areEqual(3, this.count);
 		}
 	});
 	
@@ -72,6 +86,57 @@ YUI({ filter: 'raw' }).use("node", "console", "test" , function (Y) {
 			window.subscribe("/some/topic", func);
 			
 			Assert.areEqual(func, c_["/some/topic"][0]);
+		},
+		
+		testGetChildSubs : function() {
+			var Assert = Y.Assert,
+			    counter = 0,
+				func = function(){ counter++; };
+		
+			window.subscribe("/some", func);
+			window.subscribe("/some/path", func);
+			
+			window.publish("/some/path");
+			
+			Assert.areEqual(2, counter);
+		},
+		
+		testGetPublishedTopic : function() {
+			var Assert = Y.Assert,
+			    originalTopic,
+				func = function(){ originalTopic = this.originalTopic };
+		
+			window.subscribe("/some", func);
+			
+			window.publish("/some/path");
+			
+			Assert.areEqual("/some/path", originalTopic);
+		},
+		
+		testPublishAnySlashes : function() {
+			var Assert = Y.Assert,
+			    counter = 0,
+				func = function(){ counter++; };
+		
+			window.subscribe("somepath", func);
+			
+			window.publish("somepath");
+			
+			Assert.areEqual(1, counter);
+		},
+		
+		testPublishWithoutLeadingSlash : function() {
+			var Assert = Y.Assert,
+			    counter = 0,
+				func = function(){ counter++; };
+		
+			window.subscribe("some", func);
+			window.subscribe("some/path", func);
+			
+			window.publish("some/path");
+			window.publish("bogus/path");
+			
+			Assert.areEqual(2, counter);
 		}
 	});
 

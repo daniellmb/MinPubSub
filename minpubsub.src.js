@@ -9,7 +9,22 @@
 	// the topic/subscription hash
 	var cache = d.c_ || {}; //check for "c_" cache for unit testing
 	
+	var publishTopic = function(/* String */ topic, /* String */ originalTopic, /* Array? */ args) {
+		var subs = cache[topic],
+			len = subs ? subs.length : 0,
+			obj = {
+			    originalTopic: originalTopic /*,
+			    subTopic: ..... */
+			};
+
+		//can change loop or reverse array if the order matters
+		while(len--){
+			subs[len].apply(obj, args || []);
+		}
+	};
+	
 	d.publish = function(/* String */ topic, /* Array? */ args){
+	    var currentTopic;
 		// summary: 
 		//		Publish some data on a named topic.
 		// topic: String
@@ -23,14 +38,17 @@
 		//		with a function signature like: function(a,b,c){ ... }
 		//
 		//		publish("/some/topic", ["a","b","c"]);
-		
-		var subs = cache[topic],
-			len = subs ? subs.length : 0;
-
-		//can change loop or reverse array if the order matters
-		while(len--){
-			subs[len].apply(d, args || []);
+		//		
+		//		Anything subscribed on a "parent" topic (i.e. "/some") will also
+		//		be called.  Callbacks can use "this.originalTopic" to get a
+		//		reference to the actual topic that was called
+		//		
+		currentTopic = topic;
+		while ( currentTopic.length > 0 ) {
+		    publishTopic(currentTopic, topic, args);
+		    currentTopic = currentTopic.substring(0, currentTopic.lastIndexOf('/'));
 		}
+		
 	};
 
 	d.subscribe = function(/* String */ topic, /* Function */ callback){
@@ -48,6 +66,9 @@
 		//	
 		// example:
 		//		subscribe("/some/topic", function(a, b, c){ /* handle data */ });
+		//		
+		//		subscribe("/some", function(a, b, c) { console.log(this.originalTopic); } );
+		
 
 		if(!cache[topic]){
 			cache[topic] = [];
@@ -66,8 +87,9 @@
 		//		unsubscribe(handle);
 		
 		var subs = cache[callback ? handle : handle[0]],
-			callback = callback || handle[1],
 			len = subs ? subs.length : 0;
+		
+		callback = callback || handle[1];
 		
 		while(len--){
 			if(subs[len] === callback){
