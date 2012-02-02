@@ -1,0 +1,21 @@
+{
+    "name": "minpubsub",
+    "description": "198 byte publish/subscribe messaging micro-framework",
+    "version": "0.0.1",
+    "keywords": [
+        "publish",
+        "subscribe",
+        "pubsub",
+		"observer"
+    ],
+    "author": "Daniel Lamb <daniellmb.com>",
+    "dependencies": {},
+    "main": "index",
+    "engines": {
+        "node": "*"
+    },
+  	"repository": {
+    	"type": "git",
+    	"url": "git://github.com/daniellmb/minpubsub.git"
+  	}
+}
