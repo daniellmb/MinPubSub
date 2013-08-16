@@ -10,10 +10,7 @@
     ],
     "author": "Daniel Lamb <daniellmb.com>",
     "dependencies": {},
-    "main": "index",
-    "engines": {
-        "node": "*"
-    },
+    "main": "minpubsub.src.js",
     "repository": {
         "type": "git",
         "url": "git://github.com/daniellmb/minpubsub.git"
