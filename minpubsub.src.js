@@ -5,11 +5,12 @@
 */
 
 (function(d){
+	var MinPubSub = {};
 
 	// the topic/subscription hash
 	var cache = d.c_ || {}; //check for "c_" cache for unit testing
 	
-	d.publish = function(/* String */ topic, /* Array? */ args){
+	MinPubSub.publish = function(/* String */ topic, /* Array? */ args){
 		// summary: 
 		//		Publish some data on a named topic.
 		// topic: String
@@ -33,7 +34,7 @@
 		}
 	};
 
-	d.subscribe = function(/* String */ topic, /* Function */ callback){
+	MinPubSub.subscribe = function(/* String */ topic, /* Function */ callback){
 		// summary:
 		//		Register a callback on a named topic.
 		// topic: String
@@ -56,7 +57,7 @@
 		return [topic, callback]; // Array
 	};
 
-	d.unsubscribe = function(/* Array */ handle, /* Function? */ callback){
+	MinPubSub.unsubscribe = function(/* Array */ handle, /* Function? */ callback){
 		// summary:
 		//		Disconnect a subscribed function for a topic.
 		// handle: Array
@@ -76,4 +77,18 @@
 		}
 	};
 
-})(this);
+	// UMD definition to allow for CommonJS, AMD and legacy window
+  if (typeof module === 'object' && typeof module.exports === 'object') {
+      // CommonJS, just export
+      module.exports = exports = MinPubSub;
+  } else if (typeof define === 'function' && define.amd) {
+      // AMD support
+      define(function () { return MinPubSub; });
+  } else if (typeof window === 'object') {
+      // If no AMD and we are in the browser, attach to window
+      window.publish = MinPubSub.publish;
+      window.subscribe = MinPubSub.subscribe;
+      window.unsubscribe = MinPubSub.unsubscribe;
+  }
+
+})(window);
