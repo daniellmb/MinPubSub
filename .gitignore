@@ -1,0 +1,15 @@
+# package managers #
+####################
+npm-debug.log
+
+# generated files #
+######################
+.idea/
+.DS_Store
+.DS_Store?
+._*
+.Trashes
+Icon?
+ehthumbs.db
+Thumbs.db
+.tmp
