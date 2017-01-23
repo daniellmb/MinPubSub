@@ -1,6 +1,6 @@
 MinPubSub
 =========
-[![CDNJS](https://img.shields.io/cdnjs/v/jquery.svg)](https://cdnjs.com/libraries/MinPubSub)
+[![CDNJS](https://img.shields.io/cdnjs/v/MinPubSub.svg)](https://cdnjs.com/libraries/MinPubSub)
 A micro publish/subscribe messaging framework, weighing in at only **198 bytes** gzipped. Created by rewriting Peter Higgins' jQuery plugin, MinPubSub is completely self contained with no external dependencies. Keep your projects loosely coupled with this powerful design pattern. Also available on [NPM](https://www.npmjs.com/package/minpubsub) and [Bower](http://bower.io/search/?q=minpubsub).
 
 ### Features
