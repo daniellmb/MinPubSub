@@ -3,9 +3,9 @@
  * Copyright(c) 2011 Daniel Lamb <daniellmb.com>
  * MIT Licensed
  */
-(function (context) {
+(function () {
   var MinPubSub = {};
-
+  var context = this.window || window;
   // the topic/subscription hash
   var cache = context.c_ || {}; //check for 'c_' cache for unit testing
 
@@ -92,4 +92,4 @@
     context.unsubscribe = MinPubSub.unsubscribe;
   }
 
-})(this.window);
+})();
